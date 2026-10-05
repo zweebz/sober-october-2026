@@ -50,6 +50,7 @@
 
     html, body {
       width: 100%;
+      max-width: 100vw;
       min-height: 100vh;
       background-color: var(--bg-obsidian);
       color: var(--text-primary);
@@ -160,6 +161,8 @@
       display: flex;
       flex-direction: column;
       gap: 28px;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     /* ==========================================================================
@@ -1935,40 +1938,148 @@
 
     @media (max-width: 768px) {
       .app-viewport {
-        padding: 16px;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+        padding: 16px 12px 36px;
+        overflow-x: hidden;
         gap: 18px;
       }
       .telemetry-header {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 14px;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px;
       }
       .header-left {
-        flex-direction: column;
-        text-align: center;
+        width: 100%;
+        justify-content: flex-start;
       }
       .edt-clock-badge {
         width: 100%;
-        max-width: 320px;
+        justify-content: center;
+        text-align: center;
+        box-sizing: border-box;
+        font-size: 0.72rem;
+        padding: 8px 10px;
       }
       .header-right {
         width: 100%;
-        justify-content: center;
         flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
       }
-      .digits-row {
-        gap: 4px;
-      }
-      .digit-value {
-        font-size: 1.8rem;
+      .status-badge#system-status-badge {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
       }
       .weekends-pills-row {
         grid-template-columns: 1fr;
       }
-      .milestone-badge {
+    }
+
+    @media (max-width: 600px) {
+      .header-left {
+        gap: 12px;
+      }
+      .header-title-block h1 {
+        font-size: 0.95rem;
+        letter-spacing: 0.1em;
+        flex-wrap: wrap;
+      }
+      .header-title-block p {
+        font-size: 0.65rem;
+      }
+      .header-right .control-btn {
+        flex: 1;
+        justify-content: center;
+      }
+      .ticker-card {
+        padding: 16px 12px;
+      }
+      .digits-row {
+        gap: 2px;
+        width: 100%;
+      }
+      .digit-box {
+        padding: 10px 4px 8px;
+        min-width: 0;
+      }
+      .digit-value {
+        font-size: 1.5rem;
+      }
+      .digit-ghost {
+        font-size: 1.5rem;
+      }
+      .digit-label {
         font-size: 0.55rem;
+        letter-spacing: 0.06em;
+      }
+      .digit-separator {
+        font-size: 1.3rem;
+        margin-top: -6px;
+      }
+      .card-footer-telemetry {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .milestones-container {
+        overflow: hidden;
+        height: 56px;
+      }
+      .milestone-badge {
+        font-size: 0.5rem;
         padding: 2px 4px;
+        white-space: nowrap;
+      }
+      #ms-1 .milestone-badge {
+        transform: translateX(-20%);
+      }
+      #ms-4 .milestone-badge {
+        transform: translateX(-80%);
+      }
+      .weekends-pills-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .highball-gauge-card {
+        padding: 16px 12px;
+        overflow: hidden;
+      }
+      .glass-vessel-stage {
+        max-width: 100%;
+      }
+      .cockpit-milestones-legend {
+        grid-template-columns: 1fr;
+      }
+      .cockpit-action-row {
+        flex-direction: column;
+      }
+      .matrix-card {
+        padding: 16px 14px;
+      }
+      .sim-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 14px;
+        gap: 10px;
+      }
+      .app-footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 14px 12px;
+      }
+      .footer-left {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .spiderweb-corner {
+        width: 80px;
+        height: 80px;
+        opacity: 0.08;
       }
     }
   </style>
