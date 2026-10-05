@@ -2051,6 +2051,13 @@
       .header-title-block p {
         font-size: 0.65rem;
       }
+      .hero-completion-card {
+        padding: 12px 14px;
+        margin: 12px 0 14px 0;
+      }
+      .hero-percentage-glitch {
+        font-size: 2.3rem;
+      }
       .header-right .control-btn {
         flex: 1;
         justify-content: center;
@@ -2085,58 +2092,97 @@
         align-items: flex-start;
         gap: 8px;
       }
-      .hero-completion-card {
-        padding: 12px 14px;
-        margin: 12px 0 14px 0;
-      }
 
-      .hero-percentage-glitch {
-        font-size: 2.3rem;
-      }
-
-      /* Prevent gauge wrapper horizontal clipping */
+      /* Step 2: Ensure Container Padding Doesn't Bleed */
       .highball-gauge-card {
-        padding: 16px 12px;
-        overflow: hidden;
-        max-width: 100%;
-        box-sizing: border-box;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        padding: 16px 12px !important;
       }
 
+      /* 1. Ensure the highball vessel container centers cleanly with room for badges */
       .vessel-column {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        overflow: visible;
-        padding: 0;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        overflow: hidden !important;
+        padding: 0 8px !important;
+        box-sizing: border-box !important;
       }
 
       .glass-vessel-stage {
-        transform: scale(0.82);
-        transform-origin: top center;
-        margin: 0 auto -70px auto;
+        /* Scale down slightly more and center origin so labels on the right don't poke past 100vw */
+        transform: scale(0.68) !important;
+        transform-origin: center top !important;
+        margin: 0 auto -120px auto !important;
       }
 
       .milestones-container {
         overflow: visible !important;
-        right: -175px;
+        right: -175px !important;
       }
 
+      /* 2. Compact the milestone badges and pull them inward */
       .milestone-badge {
-        font-size: 0.54rem !important;
+        font-size: 0.58rem !important;
         padding: 2px 6px !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+        max-width: 130px !important;
+        text-overflow: ellipsis !important;
+        overflow: hidden !important;
+        /* Shift badges slightly inward to prevent clipping against the right viewport edge */
+        position: relative !important;
+        right: 4px !important;
+        transform: translateY(-50%) !important;
       }
 
-      /* Edge clamps so milestones never escape boundaries */
-      .milestone-marker:first-child {
-        transform: translateY(50%) translateX(0);
-        align-items: flex-start;
+      /* 3. Fix the 2x2 telemetry stat grid so cards never clip on narrow screens */
+      .gauge-stats-grid,
+      .gate-items-grid,
+      .telemetry-mini-grid,
+      .vessel-metrics-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
       }
 
-      .milestone-marker:last-child {
-        transform: translateY(50%) translateX(0);
-        align-items: flex-end;
+      .gauge-stat-box,
+      .gate-item-card,
+      .vessel-metric-cell {
+        min-width: 0 !important;
+        padding: 8px 10px !important;
+        overflow: hidden !important;
+        word-break: break-word !important;
+      }
+
+      .gauge-stat-label,
+      .gauge-stat-val,
+      .vessel-metric-cell .cell-label,
+      .vessel-metric-cell .cell-value,
+      .cell-label,
+      .cell-value {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        font-size: 0.75rem !important;
+      }
+
+      .vessel-metric-cell .cell-label,
+      .gauge-stat-label {
+        font-size: 0.58rem !important;
+        letter-spacing: 0.04em !important;
+        line-height: 1.25 !important;
+      }
+
+      .vessel-metric-cell .cell-value,
+      .gauge-stat-val {
+        font-size: 0.68rem !important;
+        letter-spacing: 0.01em !important;
+        line-height: 1.25 !important;
       }
 
       .weekends-pills-row {
@@ -2175,13 +2221,29 @@
       }
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: 480px) {
       .glass-vessel-stage {
-        transform: scale(0.74);
-        margin: 0 auto -95px auto;
+        transform: scale(0.65) !important;
+        transform-origin: center top !important;
+        margin: 0 auto -130px auto !important;
       }
       .hero-percentage-glitch {
-        font-size: 2rem;
+        font-size: 2rem !important;
+      }
+      .gauge-stat-box,
+      .gate-item-card,
+      .vessel-metric-cell {
+        padding: 8px 6px !important;
+      }
+      .gauge-stat-label,
+      .vessel-metric-cell .cell-label,
+      .cell-label {
+        font-size: 0.54rem !important;
+      }
+      .gauge-stat-val,
+      .vessel-metric-cell .cell-value,
+      .cell-value {
+        font-size: 0.68rem !important;
       }
     }
   </style>
