@@ -177,6 +177,8 @@
       border-radius: 12px;
       box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), 0 0 25px -4px rgba(45, 212, 191, 0.1);
       position: relative;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .telemetry-header::before, .telemetry-header::after {
@@ -234,6 +236,102 @@
       letter-spacing: 0.12em;
       color: var(--text-secondary);
       margin-top: 3px;
+    }
+
+    /* Master EDT Telemetry Clock Badge */
+    .edt-clock-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 16px;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 8px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 16px -2px rgba(45, 212, 191, 0.18), inset 0 0 10px rgba(45, 212, 191, 0.05);
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      user-select: none;
+      transition: all 0.25s ease;
+    }
+
+    .edt-clock-badge:hover {
+      border-color: var(--border-cyan-glow);
+      box-shadow: 0 4px 22px rgba(0, 0, 0, 0.6), 0 0 24px rgba(45, 212, 191, 0.35), inset 0 0 14px rgba(45, 212, 191, 0.1);
+    }
+
+    .edt-clock-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .edt-clock-pulse {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--quinine-cyan);
+      box-shadow: 0 0 8px var(--quinine-cyan);
+      animation: radar-blink 1.2s infinite;
+    }
+
+    .edt-clock-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: rgba(45, 212, 191, 0.7);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .edt-clock-display {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      white-space: nowrap;
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+    }
+
+    .edt-clock-display .clock-digits {
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+
+    .edt-clock-display .clock-sec {
+      color: var(--quinine-cyan);
+      text-shadow: 0 0 14px rgba(45, 212, 191, 0.8), 0 0 24px rgba(45, 212, 191, 0.4);
+    }
+
+    .edt-clock-display .clock-dot {
+      color: rgba(45, 212, 191, 0.7);
+    }
+
+    .edt-clock-display .clock-ms {
+      font-size: 0.82rem;
+      color: var(--ghost-lime);
+      text-shadow: 0 0 12px rgba(163, 230, 53, 0.85), 0 0 20px rgba(163, 230, 53, 0.4);
+      min-width: 2.8ch;
+      display: inline-block;
+    }
+
+    .edt-clock-display .clock-ampm {
+      font-size: 0.75rem;
+      color: var(--pumpkin-light);
+      margin-left: 4px;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 8px rgba(251, 146, 60, 0.4);
+    }
+
+    .edt-clock-display .clock-tz {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.08em;
+      margin-left: 3px;
     }
 
     .header-right {
@@ -1842,12 +1940,22 @@
       }
       .telemetry-header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
         gap: 14px;
+      }
+      .header-left {
+        flex-direction: column;
+        text-align: center;
+      }
+      .edt-clock-badge {
+        width: 100%;
+        max-width: 320px;
       }
       .header-right {
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
+        flex-wrap: wrap;
       }
       .digits-row {
         gap: 4px;
@@ -1936,6 +2044,17 @@
         <div class="header-title-block">
           <h1>THE DRY GHOST PROTOCOL <span style="color:var(--border-cyan); opacity:0.6;">//</span> <span class="spooky-tag">SOBER OCTOBER</span></h1>
           <p>AUTONOMOUS BOTANICAL TELEMETRY • OCT 01, 00:00 EDT → OCT 31, 19:00 EDT</p>
+        </div>
+      </div>
+
+      <!-- Dedicated EDT Master Telemetry Clock Badge -->
+      <div class="edt-clock-badge" id="edt-clock-badge" title="Master 12-Hour EDT Telemetry Clock with Millisecond Precision">
+        <div class="edt-clock-meta">
+          <span class="edt-clock-pulse"></span>
+          <span class="edt-clock-label">EDT MASTER TIME //</span>
+        </div>
+        <div class="edt-clock-display" id="edt-clock-display">
+          <span class="clock-digits">12:00:</span><span class="clock-sec">00</span><span class="clock-dot">.</span><span class="clock-ms">000</span> <span class="clock-ampm">AM</span> <span class="clock-tz">EDT</span>
         </div>
       </div>
 
@@ -2666,6 +2785,7 @@
 
       const elSimBar = document.getElementById("sim-bar");
       const elSimToggle = document.getElementById("sim-drawer-toggle");
+      const elEdtClockDisplay = document.getElementById("edt-clock-display");
 
       /* ========================================================================
          3. PRECISION TIME BASE & DRIFT-FREE ENGINE
@@ -2675,23 +2795,42 @@
         if (simulationMode === "live") {
           return realNow;
         }
+        const delta = realNow - simulationOffsetMs;
         if (simulationMode === "start") {
-          return START_TIME + 3600000 * 2.5; // 2.5h into Oct 1
+          return START_TIME + 3600000 * 2.5 + delta; // 2.5h into Oct 1 + live ticking
         }
         if (simulationMode === "halftime") {
-          return START_TIME + (TOTAL_SPAN_MS * 0.5); // Exact halftime
+          return START_TIME + (TOTAL_SPAN_MS * 0.5) + delta; // Exact halftime + live ticking
         }
         if (simulationMode === "stretch") {
-          return new Date("2026-10-24T12:00:00-04:00").getTime();
+          return new Date("2026-10-24T12:00:00-04:00").getTime() + delta; // Oct 24 + live ticking
         }
         if (simulationMode === "countdown-10s") {
-          // Dynamic ticking down from 10s before target
-          return TARGET_TIME - Math.max(0, 10000 - (realNow - simulationOffsetMs));
+          return (TARGET_TIME - 10000) + delta; // Dynamic ticking from T-10s through finish
         }
         if (simulationMode === "halloween-pour") {
-          return TARGET_TIME + 1000; // Triggered celebration!
+          return TARGET_TIME + 1000 + delta; // Triggered celebration + live ticking
         }
         return realNow;
+      }
+
+      function formatEdtClock(timestamp) {
+        // Eastern Daylight Time (EDT) is UTC-4:
+        const edtShifted = new Date(timestamp - (4 * 3600 * 1000));
+        const h24 = edtShifted.getUTCHours();
+        const m = edtShifted.getUTCMinutes();
+        const s = edtShifted.getUTCSeconds();
+        const ms = edtShifted.getUTCMilliseconds();
+        const ampm = h24 >= 12 ? "PM" : "AM";
+        const h12 = h24 % 12 || 12;
+        const hStr = h12 < 10 ? "0" + h12 : String(h12);
+        const mStr = m < 10 ? "0" + m : String(m);
+        const sStr = s < 10 ? "0" + s : String(s);
+        let msStr = String(ms);
+        if (ms < 10) msStr = "00" + ms;
+        else if (ms < 100) msStr = "0" + ms;
+
+        return { hStr, mStr, sStr, msStr, ampm };
       }
 
       function padTwo(num) {
@@ -3269,6 +3408,7 @@
           chip.classList.add("active");
           simulationMode = chip.getAttribute("data-mode");
           simulationOffsetMs = Date.now();
+          lastDashboardSec = -1;
           updateDashboard();
         });
       });
@@ -3283,6 +3423,7 @@
           if (c.getAttribute("data-mode") === "live") c.classList.add("active");
           else c.classList.remove("active");
         });
+        lastDashboardSec = -1;
         updateDashboard();
       });
 
@@ -3340,11 +3481,42 @@
       } catch (e) {}
 
       /* ========================================================================
-         9. MAIN TICK LOOP
-         Strict 1000ms Interval + RAF synchronizer for zero drift
+         9. HIGH-PRECISION MASTER CLOCK & DASHBOARD ENGINE
+         Decoupled RAF Millisecond Master Clock + Zero-Drift Dashboard Sync
          ======================================================================== */
+      let lastDashboardSec = -1;
+
+      function renderMasterClock() {
+        const now = getCurrentTelemetryTime();
+        const t = formatEdtClock(now);
+
+        if (elEdtClockDisplay) {
+          elEdtClockDisplay.innerHTML = `<span class="clock-digits">${t.hStr}:${t.mStr}:</span><span class="clock-sec">${t.sStr}</span><span class="clock-dot">.</span><span class="clock-ms">${t.msStr}</span> <span class="clock-ampm">${t.ampm}</span> <span class="clock-tz">EDT</span>`;
+        }
+
+        const currentSec = Math.floor(now / 1000);
+        if (currentSec !== lastDashboardSec) {
+          lastDashboardSec = currentSec;
+          updateDashboard();
+        }
+
+        requestAnimationFrame(renderMasterClock);
+      }
+
+      // Initial render & launch high-precision RAF loop
+      lastDashboardSec = -1;
       updateDashboard();
-      setInterval(updateDashboard, 1000);
+      requestAnimationFrame(renderMasterClock);
+
+      // Background tab safety interval (in case tab is inactive / RAF throttled)
+      setInterval(() => {
+        const now = getCurrentTelemetryTime();
+        const currentSec = Math.floor(now / 1000);
+        if (currentSec !== lastDashboardSec) {
+          lastDashboardSec = currentSec;
+          updateDashboard();
+        }
+      }, 1000);
 
     })();
   </script>
