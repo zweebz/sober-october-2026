@@ -1910,6 +1910,66 @@
       background: rgba(45, 212, 191, 0.15);
     }
 
+
+    /* ==========================================================================
+       HERO PERCENTAGE PROMINENCE
+       ========================================================================== */
+    .hero-completion-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(14, 18, 14, 0.7);
+      border: 1px solid rgba(57, 255, 20, 0.25);
+      box-shadow: 0 0 20px rgba(57, 255, 20, 0.08), inset 0 0 15px rgba(0, 0, 0, 0.8);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0 18px 0;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .hero-percentage-glitch {
+      font-family: 'Share Tech Mono', monospace, monospace;
+      font-size: clamp(2.4rem, 8vw, 3.8rem);
+      font-weight: 700;
+      color: #39ff14;
+      text-shadow: 0 0 12px rgba(57, 255, 20, 0.6), 0 0 24px rgba(57, 255, 20, 0.25);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero-completion-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .hero-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #39ff14;
+      box-shadow: 0 0 8px #39ff14;
+      animation: pulseNeon 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseNeon {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px #39ff14; }
+      50% { opacity: 0.4; transform: scale(0.75); box-shadow: 0 0 2px #39ff14; }
+    }
+
+    .hero-completion-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      color: #8c9e8c;
+      text-transform: uppercase;
+    }
+
     /* ==========================================================================
        RESPONSIVE DESIGN (Desktop 1920x1080 and 1440x900)
        ========================================================================== */
@@ -2025,31 +2085,63 @@
         align-items: flex-start;
         gap: 8px;
       }
-      .milestones-container {
-        overflow: hidden;
-        height: 56px;
+      .hero-completion-card {
+        padding: 12px 14px;
+        margin: 12px 0 14px 0;
       }
-      .milestone-badge {
-        font-size: 0.5rem;
-        padding: 2px 4px;
-        white-space: nowrap;
+
+      .hero-percentage-glitch {
+        font-size: 2.3rem;
       }
-      #ms-1 .milestone-badge {
-        transform: translateX(-20%);
-      }
-      #ms-4 .milestone-badge {
-        transform: translateX(-80%);
-      }
-      .weekends-pills-row {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
+
+      /* Prevent gauge wrapper horizontal clipping */
       .highball-gauge-card {
         padding: 16px 12px;
         overflow: hidden;
-      }
-      .glass-vessel-stage {
         max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .vessel-column {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        overflow: visible;
+        padding: 0;
+      }
+
+      .glass-vessel-stage {
+        transform: scale(0.82);
+        transform-origin: top center;
+        margin: 0 auto -70px auto;
+      }
+
+      .milestones-container {
+        overflow: visible !important;
+        right: -175px;
+      }
+
+      .milestone-badge {
+        font-size: 0.54rem !important;
+        padding: 2px 6px !important;
+        white-space: nowrap !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+      }
+
+      /* Edge clamps so milestones never escape boundaries */
+      .milestone-marker:first-child {
+        transform: translateY(50%) translateX(0);
+        align-items: flex-start;
+      }
+
+      .milestone-marker:last-child {
+        transform: translateY(50%) translateX(0);
+        align-items: flex-end;
+      }
+
+      .weekends-pills-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
       }
       .cockpit-milestones-legend {
         grid-template-columns: 1fr;
@@ -2080,6 +2172,16 @@
         width: 80px;
         height: 80px;
         opacity: 0.08;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .glass-vessel-stage {
+        transform: scale(0.74);
+        margin: 0 auto -95px auto;
+      }
+      .hero-percentage-glitch {
+        font-size: 2rem;
       }
     }
   </style>
@@ -2155,6 +2257,14 @@
         <div class="header-title-block">
           <h1>THE DRY GHOST PROTOCOL <span style="color:var(--border-cyan); opacity:0.6;">//</span> <span class="spooky-tag">SOBER OCTOBER</span></h1>
           <p>AUTONOMOUS BOTANICAL TELEMETRY • OCT 01, 00:00 EDT → OCT 31, 19:00 EDT</p>
+          <!-- HERO PERCENTAGE PROMINENCE -->
+          <div class="hero-completion-card">
+            <div class="hero-percentage-glitch" id="hero-progress-percent">0.0000%</div>
+            <div class="hero-completion-meta">
+              <span class="hero-pulse-dot"></span>
+              <span class="hero-completion-label">OCTOBER COMPLETION TELEMETRY</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3019,6 +3129,12 @@
         elHighballFill.style.width = "100%";
         elGaugePercentVal.textContent = progressPercent.toFixed(6);      // High-precision micro-tick (6 decimal places)
         elGaugeHoursSub.textContent = `${hoursCompleted.toFixed(2)}h / ${TOTAL_HOURS}h COMPLETED`;
+
+        // Hero Percentage Telemetry Focal Point
+        const heroPercentElem = document.getElementById('hero-progress-percent');
+        if (heroPercentElem) {
+          heroPercentElem.textContent = `${progressPercent.toFixed(4)}%`;
+        }
 
         // Secondary Real-time Cockpit Fluid Telemetry
         const elFluidHeight = document.getElementById("telemetry-fluid-height");
